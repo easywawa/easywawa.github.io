@@ -1,10 +1,10 @@
 ---
 layout: post
-category: MySql
+category: xx
 title: 标题
-tagline: by 明不知昔
+tagline: by 噜噜噜
 tags: 
-  - MySql
+  - xx
 published: true
 ---
 
