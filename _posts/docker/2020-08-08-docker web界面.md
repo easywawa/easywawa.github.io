@@ -89,15 +89,23 @@ docker run -d -p 9000:9000 --restart=always -v /var/run/docker.sock:/var/run/doc
 
 
 
-
-
 # 集群模式
 
 更多的情况下，我们会有一个`docker`集群，可能有几台机器，也可能有几十台机器，因此，进行集群管理就十分重要了，`Portainer`也支持集群管理，`Portainer`可以和`Swarm`一起来进行集群管理操作。这里我首先搭建了一个`Swarm`
 
 `Swarm`集群的搭建方法可参考这篇文章：
 
-[Swarm集群搭建]()
+[Swarm集群搭建](https://easywawa.github.io/2020/08/08/swarm%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/)
+
+启动`Portainer`之后，首页还是给`admin`用户设置密码（这里和单机启动一样）。接下来是设置节点了，如下图：
+
+**Endpoint URL** 是swarm集群中设置的节点URL，此处我的集群端口为2376
+
+![初始界面](https://i.loli.net/2020/08/08/7ieFGusxkW3ItVr.png)
 
 
+
+##### 使用方式
+
+后续会更新
 
