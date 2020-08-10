@@ -85,7 +85,7 @@ docker run -d -p 9000:9000 --restart=always -v /var/run/docker.sock:/var/run/doc
 
 ### 使用
 
-如果是单节点，则此处选择local单机。如果还有其他的节点机器，那么选择remote
+如果是单节点，则此处选择local单机。如果需要管理其他的节点机器，那么选择remote
 
 
 
@@ -99,6 +99,8 @@ docker run -d -p 9000:9000 --restart=always -v /var/run/docker.sock:/var/run/doc
 
 启动`Portainer`之后，首页还是给`admin`用户设置密码（这里和单机启动一样）。接下来是设置节点了，如下图：
 
+**选择Local 进行添加swarm 管理节点的URL**
+
 **Endpoint URL** 是swarm集群中设置的节点URL，此处我的集群端口为2376
 
 ![初始界面](https://i.loli.net/2020/08/08/7ieFGusxkW3ItVr.png)
@@ -107,5 +109,21 @@ docker run -d -p 9000:9000 --restart=always -v /var/run/docker.sock:/var/run/doc
 
 ##### 使用方式
 
-后续会更新
+1、查看swarm集群
+
+![](https://i.loli.net/2020/08/10/QUq6akCc4FoMXZA.png)
+
+2、stack的应用
+
+![image-20200810174751358](https://i.loli.net/2020/08/10/WuNX987jZPeyUzq.png)
+
+![image-20200810175001984](https://i.loli.net/2020/08/10/evVKOEJ3BPzCXZA.png)
+
+通过命令行查看：
+
+![](https://i.loli.net/2020/08/10/RS7iaymj4gJ5Llb.png)
+
+3、service的应用
+
+
 
