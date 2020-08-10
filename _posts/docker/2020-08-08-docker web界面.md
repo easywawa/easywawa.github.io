@@ -121,6 +121,17 @@ docker run -d -p 9000:9000 --restart=always -v /var/run/docker.sock:/var/run/doc
 
 Docker Stack 我们只需对已有的 docker-compose.yml 配置文件稍加改造就可以完成 Docker **集群环境下的多服务编排**
 
+**docker stack 常用命令**：
+
+| **docker stack deploy** | 部署新的堆栈或更新现有堆栈 |
+| :---------------------- | -------------------------- |
+| docker stack ls         | 列出现有堆栈               |
+| docker stack ps         | 列出堆栈中的任务           |
+| docker stack rm         | 删除一个或多个堆栈         |
+| docker stack services   | 列出堆栈中的服务           |
+
+
+
 **此处通过模板创建Wordpress：**
 
 ![12](https://i.loli.net/2020/08/10/VtEhw8cjITsu94F.png)
@@ -133,9 +144,44 @@ Docker Stack 我们只需对已有的 docker-compose.yml 配置文件稍加改�
 
 通过命令行查看：
 
+![](https://i.loli.net/2020/08/10/mHjLrCSap9gRQTW.png)
 
+```
+docker stack ls
+
+docker stack ps Wordpress_daemon
+```
 
 3、service的应用
+
+**创建单服务集群**
+
+```
+docker service create --replicas 4 -p 80:80 --name nginx nginx:latest  ##创建4副本nginx集群
+docker service ps nginx  ##查看nginx服务所在节点
+```
+
+![](https://i.loli.net/2020/08/10/OG78tCBfZabeE9d.png)
+
+**动态扩展服务(scale)** 扩容和缩容都一样
+
+```
+docker service scale nginx=3
+```
+
+![image-20200810201346177](https://i.loli.net/2020/08/10/WSUtu9I5Xpc4RMA.png)
+
+**模拟宕机/关闭一个节点上的docker服务**
+
+![image-20200810201653941](https://i.loli.net/2020/08/10/1KInq78okfmbPx6.png)
+
+**从上图可看出，节点2的服务故障之后，从节点1上自动拉起了一个服务**
+
+
+
+**结论：即在swarm cluster集群中启动的容器，在worker node节点上删除或停用后，该容器会自动转移到其他的worker node节点上**
+
+
 
 
 
