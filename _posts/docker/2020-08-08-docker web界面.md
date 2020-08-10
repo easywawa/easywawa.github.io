@@ -115,13 +115,25 @@ docker run -d -p 9000:9000 --restart=always -v /var/run/docker.sock:/var/run/doc
 
 2、stack的应用
 
-![image-20200810174751358](https://i.loli.net/2020/08/10/WuNX987jZPeyUzq.png)
+单机模式下，我们可以使用 Docker Compose 来**编排多个服务**
 
-![image-20200810175001984](https://i.loli.net/2020/08/10/evVKOEJ3BPzCXZA.png)
+而 Docker Swarm 只能实现对**单个服务**的简单部署
+
+Docker Stack 我们只需对已有的 docker-compose.yml 配置文件稍加改造就可以完成 Docker **集群环境下的多服务编排**
+
+**此处通过模板创建Wordpress：**
+
+![12](https://i.loli.net/2020/08/10/VtEhw8cjITsu94F.png)
+
+![image-20200810195742968](https://i.loli.net/2020/08/10/rXy6RLxE5wazBgl.png)
+
+通过上图，可看到**wordpress服务由数据库和wordpress服务组成**
+
+
 
 通过命令行查看：
 
-![](https://i.loli.net/2020/08/10/RS7iaymj4gJ5Llb.png)
+
 
 3、service的应用
 
