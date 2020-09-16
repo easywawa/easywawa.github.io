@@ -652,6 +652,8 @@ ceph auth get-or-create client.cinder mon 'profile rbd' osd 'profile rbd pool=vo
 
 
 ceph auth get-or-create client.cinder-backup mon 'profile rbd' osd 'profile rbd pool=backups' mgr 'profile rbd pool=backups' > ceph.client.cinder-backup.keyring
+
+ceph auth get-or-create client.nova mon 'allow r' osd 'allow class-read object_prefix rbd_children, allow rwx pool=vms, allow rx pool=images' > ceph.client.nova.keyring
 ```
 
 ```
@@ -661,6 +663,7 @@ total 24
 -rw-r--r-- 1 root root  71 Sep 15 20:13 ceph.client.cinder-backup.keyring
 -rw-r--r-- 1 root root  64 Sep 15 20:13 ceph.client.cinder.keyring
 -rw-r--r-- 1 root root  72 Sep 15 20:11 ceph.client.glance.keyring
+-rw-r--r-- 1 root root  62 Sep 16 11:09 ceph.client.nova.keyring
 -rw-r--r-- 1 root root 431 Sep 11 17:54 ceph.conf
 -rw-r--r-- 1 root root  92 Aug 11 04:44 rbdmap
 -rw------- 1 root root   0 Sep 11 16:39 tmpQZjcR8
