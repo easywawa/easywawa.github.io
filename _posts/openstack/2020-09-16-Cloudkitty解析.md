@@ -10,7 +10,9 @@ published: true
 
 <!--more-->
 
-转载：https://www.cnblogs.com/menkeyi/p/6972732.html
+主要参考：https://www.cnblogs.com/menkeyi/p/6972732.html
+
+基于T版：https://docs.openstack.org/cloudkitty/train/admin/architecture.html
 
 ### 一、概述
 
@@ -31,9 +33,9 @@ Cloudkitty主要依赖于遥测相关的项目，包括ceilometer和gnocchi，�
 
 ##### 1、计费服务对象Tenant Fetcher
 
-Cloudkitty要知道需要对谁的资源进行计费，有两种方式：
+Cloudkitty要知道需要对谁的资源进行计费，有四种方式：
 
-- 从csv文件中获取
+- Gnocchi
 
 - 从keystone中获取（默认的方式）
 
@@ -44,7 +46,23 @@ Cloudkitty要知道需要对谁的资源进行计费，有两种方式：
   ##将Cloudkitty用户加入租户并赋予rating角色
   ```
 
+   cloudkitty.conf配置文件中 [fetcher_keystone]区域
   
+  ```
+  keystone_version：Defaults to `2`. Keystone version to use
+  
+  auth_section：keystone_authtoken
+  ```
+  
+  
+  
+- Prometheus
+
+- Source
+
+更多配置：https://docs.openstack.org/cloudkitty/train/admin/configuration/fetcher.html
+
+
 
 ##### 2、数据收集Collector
 
@@ -54,6 +72,14 @@ Cloudkitty中的transformer模块将针对不同collector的不同类型的服�
 
 1. 第一个阶段是将资源数据通过对应的CeilometerTransformer或者GnocchiTransformer进行转换
 2. 第二阶段是使用CloudKittyFormatTransformer统一数据格式为data = [{'usage': {'service_type': [{'vol': {'unit': xx, 'qty': xxx}, 'desc': {'xxx': 'xxx',…, 'metadata': {‘xxx’: ’xxx’}}}]}, 'period': {'begin': xxxxx, 'end': xxxxx}}]交付给计费引擎。当然在不需要对资源数据进行转化的情况下，也可以直接使用CloudKittyFormatTransformer将数据转化为计费引擎所能识别的格式
+
+**CloudKitty中提供了三个收集器：**
+
+- gnocchi：Defaults to `gnocchi`
+- monasca:
+- prometheus:
+
+更多配置：https://docs.openstack.org/cloudkitty/train/admin/configuration/collector.html
 
 
 
@@ -75,9 +101,22 @@ Cloudkitty的计费引擎是周期性计算资源费用的，而这个周期可�
 
 如果将计费周期调得更小，云环境中的需要计费的资源更多，那么将会对费用数据的存储带来挑战，它会直接影响到数据的使用效果，因此费用数据的存储也是一个重要的环节
 
-Cloudkitty的storage目前支持sqlalchemy和gnocchi_hybrid两种方式存放费用数据，因为它们都是通过插件方式实现的，所以具体采用哪种可以**通过配置文件指定**
+Cloudkitty的storage目前支持sqlalchemy和gnocchi_hybrid两种方式存放费用数据，因为它们都是通过插件方式实现的，所以具体采用哪种可以**通过配置文件指定**  
 
-将费用数据存储在gnocchi中是必须的
+```
+ [storage]
+backend = influxdb
+version = 2
+```
+
+`version`: Defaults to 2. Version of the storage interface to use (must be 1 or 2).
+
+**backend**:
+
+* v1: sqlalchemy
+* v2： influxdb、elasticsearch
+
+更多配置：https://docs.openstack.org/cloudkitty/train/admin/configuration/storage.html
 
 
 
