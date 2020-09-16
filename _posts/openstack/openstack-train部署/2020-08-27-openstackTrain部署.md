@@ -617,7 +617,58 @@ Kuryr
 
 https://docs.openstack.org/kolla-ansible/train/reference/deployment-config/resource-constraints.html
 
-### 五、部署
+### 五、部署ceph
+
+使用 ceph-deploy部署ceph。注意此处要部署N版及以上
+
+部署完之后：
+
+**创建池**
+
+```
+ceph osd pool create images 64 64    ##注意要是2的平方
+ceph osd pool create backups 64 64
+ceph osd pool create vms 64 64
+ceph osd pool create volumes  64 64
+```
+
+
+
+```
+[cephbonc@ceph-nautilus-deploy ceph]$ ceph osd lspools
+15 volumes
+16 vms
+17 images
+18 backups
+```
+
+**创建认证文件**
+
+```
+ceph auth get-or-create client.glance mon 'profile rbd' osd 'profile rbd pool=images' mgr 'profile rbd pool=images' > ceph.client.glance.keyring
+
+ceph auth get-or-create client.cinder mon 'profile rbd' osd 'profile rbd pool=volumes, profile rbd pool=vms, profile rbd-read-only pool=images' mgr 'profile rbd pool=volumes, profile rbd pool=vms' > ceph.client.cinder.keyring
+
+
+
+ceph auth get-or-create client.cinder-backup mon 'profile rbd' osd 'profile rbd pool=backups' mgr 'profile rbd pool=backups' > ceph.client.cinder-backup.keyring
+```
+
+```
+[root@ceph_nautilus_node_1 ceph]# ll
+total 24
+-rw------- 1 root root 151 Sep 11 17:49 ceph.client.admin.keyring
+-rw-r--r-- 1 root root  71 Sep 15 20:13 ceph.client.cinder-backup.keyring
+-rw-r--r-- 1 root root  64 Sep 15 20:13 ceph.client.cinder.keyring
+-rw-r--r-- 1 root root  72 Sep 15 20:11 ceph.client.glance.keyring
+-rw-r--r-- 1 root root 431 Sep 11 17:54 ceph.conf
+-rw-r--r-- 1 root root  92 Aug 11 04:44 rbdmap
+-rw------- 1 root root   0 Sep 11 16:39 tmpQZjcR8
+```
+
+将认证文件和ceph配置文件拷贝到kolla部署节点上对应的文件中
+
+### 六、部署
 
 ##### 1、修改一些tasks
 
