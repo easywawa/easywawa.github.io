@@ -192,9 +192,67 @@ HASHSIZE = 6302016
 
 size_of_mem_used_by_conntrack  = 25208064 * 352 +  6302016 * 8  ≈ 8G
 
+### 六、修改参数值
+
+#### 1、临时修改
+
+用 `sysctl [-w]` 或 `echo xxx > /pro/sys/net/netfilter/XXX` 做的修改在重启后会失效
 
 
 
+`net.netfilter.nf_conntrack_buckets` 参数是只读的，不能直接改，需要修改模块的设置：
+
+```
+# 改为 262144
+
+echo 262144 | sudo tee /sys/module/nf_conntrack/parameters/hashsize
+
+# 再查看，此时 bucket 已经变成刚才设置的值
+
+sudo sysctl net.netfilter.nf_conntrack_buckets
+```
 
 
+
+`net.netfilter.nf_conntrack_max` 参考默认值，设为桶的 4 倍：
+
+```
+sudo sysctl net.netfilter.nf_conntrack_max=1048576
+
+# 改完可以看到 net.netfilter.nf_conntrack_max 和 net.nf_conntrack_max 都变了
+```
+
+
+
+超时的值要根据业务和网络环境设置，这里只是举例
+
+```
+sudo sysctl net.netfilter.nf_conntrack_icmp_timeout=10
+sudo sysctl net.netfilter.nf_conntrack_tcp_timeout_syn_recv=5
+sudo sysctl net.netfilter.nf_conntrack_tcp_timeout_syn_sent=5
+sudo sysctl net.netfilter.nf_conntrack_tcp_timeout_established=600
+sudo sysctl net.netfilter.nf_conntrack_tcp_timeout_fin_wait=10
+sudo sysctl net.netfilter.nf_conntrack_tcp_timeout_time_wait=10
+sudo sysctl net.netfilter.nf_conntrack_tcp_timeout_close_wait=10
+sudo sysctl net.netfilter.nf_conntrack_tcp_timeout_last_ack=10
+```
+
+#### 2、永久修改
+
+`/etc/sysctl.d/` 下新建配置文件，这里以 `90-conntrack.conf` 为例（CentOS 6 等旧系统编辑 `/etc/sysctl.conf`）
+
+```
+# 格式：<参数>=<值>，等号两边可以空格，支持 # 注释
+net.netfilter.nf_conntrack_max=1048576
+net.netfilter.nf_conntrack_icmp_timeout=10
+net.netfilter.nf_conntrack_tcp_timeout_syn_recv=5
+net.netfilter.nf_conntrack_tcp_timeout_syn_sent=5
+net.netfilter.nf_conntrack_tcp_timeout_established=600
+net.netfilter.nf_conntrack_tcp_timeout_fin_wait=10
+net.netfilter.nf_conntrack_tcp_timeout_time_wait=10
+net.netfilter.nf_conntrack_tcp_timeout_close_wait=10
+net.netfilter.nf_conntrack_tcp_timeout_last_ack=10
+```
+
+**sysctl -p /etc/sysctl.d/90-conntrack.conf （\# 不传文件路径默认加载 /etc/sysctl.conf）**
 
