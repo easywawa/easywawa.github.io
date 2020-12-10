@@ -1,7 +1,7 @@
 ---
 layout: post
 category: Linux
-title: traceroute的介绍与使用
+title: 网络工具mtr、traceroute的介绍与使用
 tagline: by 噜噜噜
 tags: 
   - xx
@@ -11,6 +11,40 @@ published: true
 
 
 <!--more-->
+
+`mtr`
+
+结合了ping、tracert、nslookup工具
+
+安装：yum install mtr -y
+
+```
+第一列是Host列，主要显示从本机到指定主机经过的路由信息
+
+第二列是Loss%，显示路由到此IP的丢包率信息。需要注意的是有些丢包是ICMP的保护机制造成的
+
+第三列是Snt，表示已发送的数据包数量
+
+第四列是Last，显示最后一个包的延迟
+
+第五列是Avg，显示平均延迟
+
+第六列是Best，显示最低延迟
+
+第七列是Wrst，显示最差延迟
+
+第八列是StDev，显示标准偏差，越小网络越好
+```
+
+mtr www.baidu.com
+
+![](https://s3.ax1x.com/2020/12/07/DxI3o4.png)
+
+
+
+
+
+`traceroute`
 
 ### 一、作用
 
