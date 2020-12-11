@@ -4,7 +4,7 @@ category: Linux
 title: SYN Cookie的原理
 tagline: by 噜噜噜
 tags: 
-  - xx
+  - syn tcp
 published: true
 ---
 

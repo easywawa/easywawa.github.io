@@ -4,7 +4,7 @@ category: Linux
 title: 网络工具mtr、traceroute的介绍与使用
 tagline: by 噜噜噜
 tags: 
-  - xx
+  - 网络
 published: true
 ---
 
