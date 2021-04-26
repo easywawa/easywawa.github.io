@@ -461,7 +461,7 @@ backend_host=rbd:volumes
 rbd_pool=volumes
 volume_backend_name=rbd-1
 volume_driver=cinder.volume.drivers.rbd.RBDDriver
-rbd_secret_uuid = {{ cinder_rbd_secret_uuid }}   ##后者在password.yml文件中查找
+rbd_secret_uuid = {{ cinder_rbd_secret_uuid }}   ##后者在password.yml文件中查找cinder_rbd_secret_uuid
 ```
 
 vim  /etc/kolla/config/cinder/cinder-backup.conf

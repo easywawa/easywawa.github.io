@@ -1,7 +1,7 @@
 ---
 layout: post
 category: openstack
-title: openstack组件通信方式解析
+title: openstack组件及通信方式解析
 tagline: by 噜噜噜
 tags: 
   - xx
@@ -93,4 +93,31 @@ RESTful Web API 主要有以下三个要点：
 
 Cinder提供qos支持框架，具体的实现依赖于各vendor实现的plugin。
 
+![](https://s3.ax1x.com/2021/02/04/y1SJ1S.jpg)
+
 #### 2、neutron
+
+主要组成：
+
+- neutron-server
+
+  一个专门用来接收Neutron REST API调用的服务器，然后负责将不同的rest api分发到不同的neutron-plugin上
+
+- neutron-plugin
+
+  为不同网络功能实现的入口，各个厂商可以开发自己的plugin。Neutron-plugin接收neutron-server分发过来的REST API，**向neutron database完成一些信息的注册**，然后将具体要执行的业务操作和参数**通知给自身对应的neutron-agent**
+
+- neutron-agent
+
+  Neutron-agent可以直观地理解为neutron-plugin在设备上的代理，接收相应的neutron-plugin通知的业务操作和参数，并转换为具体的设备级操作，以指导设备的动作。当设备本地发生问题时，neutron-agent会将情况通知给neutron-plugin
+
+- Neutron database
+
+  Neutron的数据库
+
+- Network provider
+
+  实际执行功能的网络设备，一般为虚拟交换机（OVS或者Linux Bridge）
+
+  ![](https://s3.ax1x.com/2021/02/04/y16z2F.png)
+
